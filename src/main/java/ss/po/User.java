@@ -3,7 +3,6 @@ package ss.po;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Velore
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Component
 public class User {
 
     /**
@@ -21,7 +19,7 @@ public class User {
     private String userId;
 
     /**
-     * 用户昵称
+     * 用户名
      */
     private String username;
 
