@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ss.dao.ProductMapper">
+
+    <resultMap id="ProductMap" type="Product">
+        <id property="productId" jdbcType="VARCHAR" column="product_id"/>
+        <result property="productName" jdbcType="VARCHAR" column="product_name"/>
+        <result property="description" jdbcType="LONGVARCHAR" column="description"/>
+    </resultMap>
+
+    <insert id="insertProduct" parameterType="Product">
+        insert into shopping_system_5320.product_5320(product_id, product_name, description)
+        values (#{productId}, #{productName}, #{description})
+    </insert>
+
+    <update id="updateProduct" parameterType="Product">
+        update shopping_system_5320.product_5320
+        set product_name = #{productName}, description = #{description}
+        where product_id = #{productId}
+    </update>
+
+    <delete id="deleteProduct">
+        delete from shopping_system_5320.product_5320
+        where product_id = #{productId}
+    </delete>
+
+    <select id="queryAllProduct" resultMap="ProductMap">
+        select * from shopping_system_5320.product_5320
+    </select>
+
+    <select id="queryProductByProductId" resultMap="ProductMap">
+        select * from shopping_system_5320.product_5320
+        where product_id = #{productId}
+    </select>
+
+    <select id="queryProductLikeName" resultMap="ProductMap">
+        select * from shopping_system_5320.product_5320
+        where product_name like concat('%',#{productName},'%')
+    </select>
+
+</mapper>

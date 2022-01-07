@@ -1,4 +1,4 @@
-package ss;
+package ss.constant;
 
 /**
  * @author Velore

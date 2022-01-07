@@ -10,12 +10,12 @@ import java.util.List;
 public interface UserService {
 
     /**
-     * 用户注册
+     * 插入新的用户
      * @param userId userId
      * @param password password
-     * @return 是否注册成功
+     * @return 是否插入成功
      */
-    boolean register(String userId, String password);
+    boolean insertUser(String userId, String password);
 
     /**
      * 修改用户信息
@@ -23,6 +23,12 @@ public interface UserService {
      * @return 是否修改成功
      */
     boolean updateUser(User user);
+
+    /**
+     * 查询全部用户
+     * @return user list
+     */
+    List<User> queryAllUser();
 
     /**
      * 根据用户id查询用户

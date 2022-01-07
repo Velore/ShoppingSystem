@@ -1,7 +1,7 @@
 package ss.service.impl;
 
 import org.apache.ibatis.session.SqlSession;
-import ss.Constant;
+import ss.constant.Constant;
 import ss.dao.UserMapper;
 import ss.po.User;
 import ss.service.UserService;
@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     UserMapper userMapper = session.getMapper(UserMapper.class);
 
     @Override
-    public boolean register(String userId, String password) {
+    public boolean insertUser(String userId, String password) {
         if(userMapper.queryUserByUserId(userId)==null){
             if(userMapper.insertUser(new User(userId, Constant.DEFAULT_USERNAME, password)) == 1) {
                 session.commit();
@@ -40,6 +40,11 @@ public class UserServiceImpl implements UserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<User> queryAllUser() {
+        return userMapper.queryAllUser();
     }
 
     @Override

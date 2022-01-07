@@ -11,20 +11,28 @@
     </resultMap>
 
     <insert id="insertUser" parameterType="User">
-        insert into shopping_system.user(user_id, username, password) VALUES (#{userId},#{username},#{password})
+        insert into shopping_system_5320.user_5320(user_id, username, password)
+        VALUES (#{userId},#{username},#{password})
     </insert>
 
     <update id="updateUser" parameterType="User">
-        update shopping_system.user set username=#{username},password=#{password}
+        update shopping_system_5320.user_5320
+        set username=#{username},password=#{password}
         where user_id = #{userId}
     </update>
 
+    <select id="queryAllUser" resultMap="UserMap">
+        select * from shopping_system_5320.user_5320
+    </select>
+
     <select id="queryUserByUserId" resultMap="UserMap">
-        select * from shopping_system.user where user_id = #{userId}
+        select * from shopping_system_5320.user_5320
+        where user_id = #{userId}
     </select>
 
     <select id="queryUserLikeName" resultMap="UserMap">
-        select * from shopping_system.user where username like concat('%',#{username},'%')
+        select * from shopping_system_5320.user_5320
+        where username like concat('%',#{username},'%')
     </select>
 
 </mapper>

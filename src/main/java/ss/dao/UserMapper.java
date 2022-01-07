@@ -25,6 +25,12 @@ public interface UserMapper {
     int updateUser(User user);
 
     /**
+     * 查询全部用户
+     * @return user list
+     */
+    List<User> queryAllUser();
+
+    /**
      * 根据用户id查询用户
      * @param userId userId
      * @return user

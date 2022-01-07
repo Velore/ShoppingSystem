@@ -30,7 +30,8 @@
     </environments>
 
     <mappers>
-        <mapper resource="ss/dao/UserMapper.xml"/>
+        <package name="ss.dao"/>
+<!--        <mapper resource="ss/dao/UserMapper.xml"/>-->
     </mappers>
 
 </configuration>
