@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ss.dao.MarketMapper">
+
+    <resultMap id="MarketMap" type="Market">
+        <id property="marketId" jdbcType="VARCHAR" column="market_id"/>
+        <result property="marketName" jdbcType="VARCHAR" column="market_name"/>
+        <result property="userId" jdbcType="VARCHAR" column="user_id"/>
+    </resultMap>
+
+    <insert id="insertMarket" parameterType="Market">
+        insert into shopping_system_5320.market_5320(market_id, market_name, user_id)
+        values(#{marketId}, #{marketName}, #{userId})
+    </insert>
+
+    <update id="updateMarket" parameterType="Market">
+        update shopping_system_5320.market_5320
+        set market_name = #{marketName}, user_id = #{userId}
+        where market_id = #{marketId}
+    </update>
+
+    <delete id="deleteMarket" parameterType="String">
+        delete from shopping_system_5320.market_5320
+        where market_id = #{marketId}
+    </delete>
+
+    <select id="queryAllMarket" resultMap="MarketMap">
+        select * from shopping_system_5320.market_5320
+    </select>
+
+    <select id="queryMarketByMarketId" resultMap="MarketMap">
+        select * from shopping_system_5320.market_5320
+        where market_id = #{marketId}
+    </select>
+
+    <select id="queryMarketByUserId" resultMap="MarketMap">
+        select * from shopping_system_5320.market_5320
+        where user_id = #{userId}
+    </select>
+
+    <select id="queryMarketLikeName" resultMap="MarketMap">
+        select * from shopping_system_5320.market_5320
+        where market_name like concat('%',#{marketName},'%')
+    </select>
+
+</mapper>
