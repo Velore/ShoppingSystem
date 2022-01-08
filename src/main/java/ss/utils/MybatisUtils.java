@@ -8,6 +8,7 @@ import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import java.io.InputStream;
 
 /**
+ * mybatis工具类
  * @author Velore
  * @date 2022/1/2
  **/

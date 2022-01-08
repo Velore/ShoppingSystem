@@ -2,10 +2,12 @@ package ss.service.impl;
 
 import org.apache.ibatis.session.SqlSession;
 import ss.bo.QueryMarketBo;
+import ss.constant.Constant;
 import ss.dao.MarketMapper;
 import ss.po.Market;
 import ss.service.MarketService;
 import ss.utils.MybatisUtils;
+import ss.utils.RandomUtils;
 
 import java.util.List;
 
@@ -20,12 +22,13 @@ public class MarketServiceImpl implements MarketService {
     MarketMapper mapper = session.getMapper(MarketMapper.class);
 
     @Override
-    public boolean insertMarket(Market market) {
-        if(mapper.queryMarketByMarketId(market.getMarketId()) == null){
-            if(mapper.insertMarket(market) == 1){
-                session.commit();
-                return true;
-            }
+    public boolean insertMarket(String marketName, String userId) {
+        if(mapper.insertMarket(new Market(
+                RandomUtils.intString(Constant.DEFAULT_ID_LENGTH),
+                marketName,
+                userId)) == 1){
+            session.commit();
+            return true;
         }
         return false;
     }

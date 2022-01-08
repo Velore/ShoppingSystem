@@ -16,9 +16,8 @@ public class MarketTest {
 
     @Test
     public void insertMarketTest(){
-        Market market = new Market("test_m", "test_name", "u1");
         System.out.println(service.queryAllMarket());
-        System.out.println(service.insertMarket(market));
+        System.out.println(service.insertMarket("test_name", "u1"));
         System.out.println(service.queryAllMarket());
     }
 
@@ -33,7 +32,9 @@ public class MarketTest {
     @Test
     public void deleteMarketTest(){
         System.out.println(service.queryAllMarket());
-        System.out.println(service.deleteMarket("test_m"));
+        String marketId = service.queryMarketByQueryMarketBo(
+                new QueryMarketBo("test_name1", null)).get(1).getMarketId();
+        System.out.println(service.deleteMarket(marketId));
         System.out.println(service.queryAllMarket());
     }
 

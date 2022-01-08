@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ss.dao.StoreMapper">
+
+    <resultMap id="StoreMap" type="Store">
+        <id property="marketId" jdbcType="VARCHAR" column="market_id"/>
+        <id property="productId" jdbcType="VARCHAR" column="product_id"/>
+        <result property="storeNum" jdbcType="INTEGER" column="store_num"/>
+    </resultMap>
+
+    <insert id="insertStore">
+        insert into shopping_system_5320.store_5320(market_id, product_id, store_num)
+        values (#{marketId}, #{productId}, #{storeNum})
+    </insert>
+
+    <update id="updateStore" parameterType="Store">
+        update shopping_system_5320.store_5320
+        set store_num = #{storeNum}
+        where market_id = #{marketId} and product_id = #{productId}
+    </update>
+
+    <delete id="deleteStore" parameterType="String">
+        delete from shopping_system_5320.store_5320
+        where market_id = #{marketId} and product_id = #{productId}
+    </delete>
+    
+    <select id="queryStoreByMarketId" resultMap="StoreMap">
+        select * from shopping_system_5320.store_5320
+        where market_id = #{marketId}
+    </select>
+
+    <select id="queryStoreByProductId" resultMap="StoreMap">
+        select * from shopping_system_5320.store_5320
+        where product_id = #{productId}
+    </select>
+
+</mapper>

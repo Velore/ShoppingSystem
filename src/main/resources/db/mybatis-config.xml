@@ -10,7 +10,7 @@
         <typeAlias type="ss.po.User" alias="User"/>
         <typeAlias type="ss.po.Product" alias="Product"/>
         <typeAlias type="ss.po.Market" alias="Market"/>
-        <typeAlias type="ss.po.MarketStore" alias="MarketStore"/>
+        <typeAlias type="ss.po.Store" alias="Store"/>
         <typeAlias type="ss.po.Order" alias="Order"/>
     </typeAliases>
 

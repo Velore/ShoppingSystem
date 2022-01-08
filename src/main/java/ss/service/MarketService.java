@@ -13,10 +13,11 @@ public interface MarketService {
 
     /**
      * 插入新的超市
-     * @param market market
+     * @param marketName marketName
+     * @param userId userId
      * @return 是否插入成功
      */
-    boolean insertMarket(Market market);
+    boolean insertMarket(String marketName, String userId);
 
     /**
      * 修改超市信息

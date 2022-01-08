@@ -25,13 +25,13 @@ create table market_5320(
 	foreign key (user_id) references `user_5320`(user_id)
 )comment '超市';
 
-create table market_store_5320(
-	# 无意义主键
-	id int not null primary key auto_increment,
+create table store_5320(
+
 	market_id varchar(16) not null comment '超市id',
 	product_id varchar(16) not null comment '商品id',
 	store_num int not null comment '存储数量',
 
+    primary key (market_id, product_id),
 	foreign key (market_id) references market_5320(market_id),
 	foreign key (product_id) references product_5320(product_id)
 )comment '超市存货';
