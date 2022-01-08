@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="ss.dao.OrderMapper">
+
+    <resultMap id="OrderMap" type="Order">
+        <id property="orderId" jdbcType="VARCHAR" column="order_id"/>
+        <result property="userId" jdbcType="VARCHAR" column="user_id"/>
+        <result property="marketId" jdbcType="VARCHAR" column="market_id"/>
+        <result property="productId" jdbcType="VARCHAR" column="product_id"/>
+        <result property="orderNum" jdbcType="INTEGER" column="order_num"/>
+        <result property="orderStatus" jdbcType="INTEGER" column="order_status"/>
+    </resultMap>
+
+    <insert id="insertOrder" parameterType="Order">
+        insert into shopping_system_5320.order_5320 (order_id, user_id, market_id, product_id, order_num)
+        values (#{orderId}, #{userId}, #{marketId}, #{productId}, #{orderNum})
+    </insert>
+
+    <update id="updateOrder" parameterType="Order">
+        update shopping_system_5320.order_5320
+        set order_status = #{orderStatus}
+        where order_id = #{orderId}
+    </update>
+
+    <delete id="deleteOrder" parameterType="String">
+        delete from shopping_system_5320.order_5320
+        where order_id = #{orderId}
+    </delete>
+
+    <select id="queryAllOrder" resultMap="OrderMap">
+        select * from shopping_system_5320.order_5320
+    </select>
+
+    <select id="queryOrderByOrderId" resultMap="OrderMap">
+        select * from shopping_system_5320.order_5320
+        where order_id = #{orderId}
+    </select>
+
+    <select id="queryOrderByQueryOrderBo" resultMap="OrderMap">
+        select * from shopping_system_5320.order_5320
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="marketId != null">
+                and market_id = #{marketId}
+            </if>
+            <if test="productId != null">
+                and product_id = #{productId}
+            </if>
+        </where>
+    </select>
+
+</mapper>
