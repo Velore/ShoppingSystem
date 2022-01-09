@@ -14,6 +14,11 @@ public class UserTest {
     final UserService userService = new UserServiceImpl();
 
     @Test
+    public void loginTest(){
+        System.out.println(userService.loginIn("root", "root"));
+    }
+
+    @Test
     public void insertUserTest(){
         System.out.println(userService.insertUser("test","pwd"));
         System.out.println(userService.queryUserByUserId("test"));

@@ -20,7 +20,7 @@ create table product_5320(
 create table market_5320(
 	market_id varchar(16) not null primary key comment '超市id',
 	market_name varchar(16) not null default 'market' comment '超市名',
-	user_id varchar(16) not null comment '超市负责人id',
+	user_id varchar(16) null default null comment '超市负责人id',
 
 	foreign key (user_id) references `user_5320`(user_id)
 )comment '超市';
@@ -51,16 +51,19 @@ create table `order_5320`(
 )comment '订单';
 
 insert into `user_5320`(user_id, username, password) values
-     ('u1','用户1','admin')
-    ,('u2','用户2','admin')
-    ,('u3','用户3','admin');
+     ('u1','用户1','p1')
+    ,('u2','用户2','p2')
+    ,('u3','用户3','p3');
 
 insert into product_5320(product_id, product_name, description) values
-     ('pa','产品a','产品a的描述')
-    ,('pb','产品b','产品b的描述')
-    ,('pc','产品c','产品c的描述');
+     ('p001','prod_a','产品a的描述')
+    ,('p002','prod_b','产品b的描述')
+    ,('p003','prod_c','产品c的描述')
+    ,('p004','prod_d','产品d的描述');
 
 insert into market_5320(market_id, market_name, user_id) values
-     ('ma','超市a','u1')
-    ,('mb','超市b','u2')
-    ,('mc','超市c','u2');
+     ('m001','超市a','u1')
+    ,('m002','超市b','u2')
+    ,('m003','超市c','u2')
+    ,('m004','超市d','u3')
+    ,('m005','超市e','u1');

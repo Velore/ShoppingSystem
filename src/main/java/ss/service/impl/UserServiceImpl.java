@@ -4,6 +4,7 @@ import org.apache.ibatis.session.SqlSession;
 import ss.constant.Constant;
 import ss.dao.UserMapper;
 import ss.po.User;
+import ss.service.MarketService;
 import ss.service.UserService;
 import ss.utils.MybatisUtils;
 
@@ -18,6 +19,12 @@ public class UserServiceImpl implements UserService {
     SqlSession session = MybatisUtils.getSqlSession();
 
     UserMapper userMapper = session.getMapper(UserMapper.class);
+
+    @Override
+    public boolean loginIn(String userId, String password) {
+        User user = userMapper.queryUserByUserId(userId);
+        return user != null && password.equals(user.getPassword());
+    }
 
     @Override
     public boolean insertUser(String userId, String password) {

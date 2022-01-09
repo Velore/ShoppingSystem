@@ -13,6 +13,11 @@ public class Constant {
     public static final String DEFAULT_USERNAME = "user";
 
     /**
+     * 默认管理员id
+     */
+    public static final String DEFAULT_ADMIN_ID = "root";
+
+    /**
      * 最长id的长度
      */
     public static final int MAX_ID_LENGTH = 16;

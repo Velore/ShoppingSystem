@@ -2,9 +2,12 @@ package ss.service.impl;
 
 import org.apache.ibatis.session.SqlSession;
 import ss.bo.QueryOrderBo;
+import ss.bo.QueryStoreBo;
 import ss.dao.OrderMapper;
 import ss.po.Order;
+import ss.po.Store;
 import ss.service.OrderService;
+import ss.service.StoreService;
 import ss.utils.MybatisUtils;
 
 import java.util.List;
@@ -20,6 +23,18 @@ public class OrderServiceImpl implements OrderService {
     OrderMapper mapper = session.getMapper(OrderMapper.class);
 
     @Override
+    public boolean checkOrder(String marketId) {
+        List<Order> orderList = queryOrderByQueryOrderBo(
+                new QueryOrderBo(null, marketId, null));
+        for(Order o : orderList){
+            if(o.getOrderStatus() == 0){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public boolean insertOrder(Order order) {
         if(mapper.insertOrder(order) == 1){
             session.commit();
@@ -30,7 +45,12 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean updateOrder(Order order){
-        if(mapper.updateOrder(order) == 1){
+        StoreService storeService = new StoreServiceImpl();
+        Store store = storeService.queryStoreByQueryBo(new QueryStoreBo(order.getMarketId(), order.getProductId())).get(0);
+        if(store.getStoreNum()>order.getOrderNum()){
+            store.setStoreNum(store.getStoreNum()-order.getOrderNum());
+        }
+        if(mapper.updateOrder(order) == 1 && storeService.updateStore(store)){
             session.commit();
             return true;
         }

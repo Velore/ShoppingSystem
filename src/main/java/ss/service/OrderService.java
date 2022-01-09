@@ -12,6 +12,13 @@ import java.util.List;
 public interface OrderService {
 
     /**
+     * 检查超市是否存在未处理订单
+     * @param marketId id
+     * @return 存在返回true
+     */
+    boolean checkOrder(String marketId);
+
+    /**
      * 插入新的订单
      * @param order order
      * @return 是否插入成功

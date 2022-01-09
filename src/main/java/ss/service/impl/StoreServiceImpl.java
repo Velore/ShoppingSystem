@@ -52,7 +52,7 @@ public class StoreServiceImpl implements StoreService {
             return mapper.queryStoreByProductId(queryBo.getProductId());
         }
         if(queryBo.getMarketId() != null && queryBo.getProductId() == null){
-            return mapper.queryStoreByProductId(queryBo.getMarketId());
+            return mapper.queryStoreByMarketId(queryBo.getMarketId());
         }
         List<Store> sList1 = mapper.queryStoreByMarketId(queryBo.getMarketId());
         List<Store> sList2 = mapper.queryStoreByProductId(queryBo.getProductId());

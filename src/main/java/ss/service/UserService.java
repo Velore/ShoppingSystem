@@ -10,6 +10,14 @@ import java.util.List;
 public interface UserService {
 
     /**
+     * 登录
+     * @param userId id
+     * @param password pwd
+     * @return 是否登录成功
+     */
+    boolean loginIn(String userId, String password);
+
+    /**
      * 插入新的用户
      * @param userId userId
      * @param password password
