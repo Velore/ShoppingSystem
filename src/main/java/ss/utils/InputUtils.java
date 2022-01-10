@@ -16,6 +16,20 @@ public class InputUtils {
     public static final Pattern MSG_PATTERN = Pattern.compile("([\\u4e00-\\u9fa5_a-zA-Z0-9\\p{P}]+)");
 
     /**
+     * 判断输入的字符串是否可以被转换为数字
+     * @param s s
+     * @return 可以被转换为数字则返回true
+     */
+    public static boolean isNumString(String s){
+        for (int i = 0 ;i<s.length();i++){
+            if(s.charAt(i)<48 || s.charAt(i) > 58){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * 将用户输入的[字符串]通过正则匹配分割为[命令序列];
      * @param input 要切割的输入字符串
      * @param pattern 正则匹配的匹配规则

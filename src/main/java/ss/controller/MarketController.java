@@ -33,26 +33,33 @@ public class MarketController {
         if(inputList.contains("-all")){
             return ListUtils.marketListString(marketService.queryAllMarket());
         }
+        if(inputList.size()>1 && (inputList.size()+1)%2!=0){
+            return "输入格式错误或参数缺失";
+        }
         QueryMarketBo marketBo = new QueryMarketBo();
         //如果是root用户,默认查询全部超市,普通用户默认查询自己管理的超市
         marketBo.setUserId(Constant.DEFAULT_ADMIN_ID.equals(view.getUserId()) ? null: view.getUserId());
+        String queryUserId = null;
         for(int i  = 1;i<inputList.size();i += 2){
             //限定超市管理员
             if("-u".equals(inputList.get(i))){
-                marketBo.setUserId(inputList.get(i+1));
+                queryUserId = inputList.get(i+1);
             }
             //限定超市名
             if("-n".equals(inputList.get(i))){
                 marketBo.setMarketName(inputList.get(i+1));
             }
         }
-        if(marketBo.getMarketName()!=null && view.getUserId().equals(marketBo.getUserId())){
-            marketBo.setUserId(null);
+        if(queryUserId != null && !view.getUserId().equals(queryUserId)){
+            marketBo.setUserId(queryUserId);
+        }else {
+            marketBo.setUserId(view.getUserId());
         }
         return ListUtils.marketListString(marketService.queryMarketByQueryMarketBo(marketBo));
     }
 
     public static String userViewInput(View view, List<String> inputList){
+        //删除超市
         if(inputList.size()>2 &&"-d".equals(inputList.get(1))){
             //若存在多个参数,则只有最后一个参数作为marketId
             view.setMarketId(inputList.get(inputList.size()-1));
@@ -70,9 +77,9 @@ public class MarketController {
             }
             //删除超市
             if(marketService.deleteMarket(view.getMarketId())){
-                return view.getMarketId()+"删除成功";
+                return "超市"+view.getMarketId()+"删除成功";
             }
-            return view.getMarketId()+"删除失败";
+            return "超市"+view.getMarketId()+"删除失败";
         }
         //创建超市
         if(inputList.size()>2 && Constant.INSERT_ARG.equals(inputList.get(1))){
@@ -91,6 +98,9 @@ public class MarketController {
         if(inputList.size()>1 && Constant.ALTER_ARG.equals(inputList.get(1))){
             if(!viewService.checkUser(view)){
                 return "权限不足，请联系该超市管理员或root用户进行操作";
+            }
+            if(inputList.size()>1 && inputList.size()%2!=0){
+                return "输入格式错误或参数缺失";
             }
             for(int i = 2;i<inputList.size();i += 2){
                 if("-n".equals(inputList.get(i))){

@@ -10,6 +10,7 @@ import ss.service.ViewService;
 import ss.service.impl.OrderServiceImpl;
 import ss.service.impl.StoreServiceImpl;
 import ss.service.impl.ViewServiceImpl;
+import ss.utils.InputUtils;
 import ss.utils.ListUtils;
 
 import java.util.ArrayList;
@@ -69,6 +70,9 @@ public class OrderController {
                         productId = inputList.get(i+1);
                         break;
                     case "-n":
+                        if(!InputUtils.isNumString(inputList.get(i+1))){
+                            return "必需的参数不能转换为数字";
+                        }
                         orderNum = Integer.parseInt(inputList.get(i+1));
                         break;
                     default:
@@ -112,10 +116,10 @@ public class OrderController {
     }
 
     public static String queryOrder(View view, List<String> inputList){
-        QueryOrderBo orderBo = new QueryOrderBo(null, view.getMarketId(), null);
+        QueryOrderBo orderBo = new QueryOrderBo(view.getUserId(), view.getMarketId(), null);
         if(inputList.size()==1 && view.getMarketId() != null){
-            return ListUtils.orderListString(orderService.queryOrderByQueryOrderBo(
-                    orderBo));
+            orderBo.setUserId(null);
+            return ListUtils.orderListString(orderService.queryOrderByQueryOrderBo(orderBo));
         }
         if(inputList.size()>1 && (inputList.size() - 1)%2!=0){
             return "输入格式错误或参数缺失";
@@ -130,13 +134,25 @@ public class OrderController {
                     orderBo.setProductId(inputList.get(i+1));
                     break;
                 case "-min":
-                    minOrderNum = Integer.parseInt(inputList.get(i+1));
+                    if(InputUtils.isNumString(inputList.get(i+1))){
+                        minOrderNum = Integer.parseInt(inputList.get(i+1));
+                    }else {
+                        System.out.println("[-min]参数不能转换为数字");
+                    }
                     break;
                 case "-max":
-                    maxOrderNum = Integer.parseInt(inputList.get(i+1));
+                    if(InputUtils.isNumString(inputList.get(i+1))){
+                        maxOrderNum = Integer.parseInt(inputList.get(i+1));
+                    }else {
+                        System.out.println("[-max]参数不能转换为数字");
+                    }
                     break;
                 case "-s":
-                    orderStatus = Integer.parseInt(inputList.get(i+1));
+                    if(InputUtils.isNumString(inputList.get(i+1))){
+                        orderStatus = Integer.parseInt(inputList.get(i+1));
+                    }else {
+                        System.out.println("[-s]参数不能转换为数字");
+                    }
                     break;
                 default:
                     System.out.println("存在异常参数"+ inputList.get(i));

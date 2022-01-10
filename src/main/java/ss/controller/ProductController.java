@@ -65,27 +65,36 @@ public class ProductController {
             if(inputList.size()%2!=0){
                 return "输入格式错误或参数缺失";
             }
-            Product product = new Product();
+            String productId = null,productName = null,description = null;
             for(int i = 2;i<inputList.size();i += 2){
                 switch (inputList.get(i)){
-                    case "-i":
-                        product.setProductId(inputList.get(i+1));
+                    case "-i": productId = inputList.get(i+1);
                         break;
-                    case "-n":
-                        product.setProductName(inputList.get(i+1));
+                    case "-n": productName = inputList.get(i+1);
                         break;
-                    case "-d":
-                        product.setDescription(inputList.get(i+1));
+                    case "-d": description = inputList.get(i+1);
                         break;
                     default:
                         System.out.println("存在异常参数");
                 }
+            }
+            Product product = productService.queryProductByProductId(productId);
+            if(product != null){
+                if(productName!=null){
+                    product.setProductName(productName);
+                }
+                if(description!=null){
+                    product.setDescription(description);
+                }
+            }else {
+                return "商品不存在";
             }
             if(productService.updateProduct(product)){
                 return "商品修改成功";
             }
             return "商品修改失败";
         }
+        //删除商品
         //可以在-d后输入多个参数,但只有最后一个参数生效,作为商品id
         if(inputList.size()>2 && "-d".equals(inputList.get(1))){
             if(!storeService.queryStoreByQueryBo(

@@ -7,7 +7,15 @@ import java.util.List;
  * @author Velore
  * @date 2022/1/9
  **/
-public class InputTest {
+public class InputUtilsTest {
+
+    @Test
+    public void isNumStringTest(){
+        System.out.println(InputUtils.isNumString("12s"));
+        System.out.println(InputUtils.isNumString("125"));
+        System.out.println(InputUtils.isNumString("1d2"));
+        System.out.println(InputUtils.isNumString("s12"));
+    }
 
     @Test
     public void inputSpiltTest(){
