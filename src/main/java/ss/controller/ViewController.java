@@ -62,6 +62,12 @@ public class ViewController {
                         for(Map.Entry<String, String> entry:InputFormat.MAIN_VIEW.entrySet()){
                             System.out.println(entry.getKey()+": '"+entry.getValue()+"'");
                         }
+                        System.out.println("命令由'前缀'和'参数'组成,没有带中括号的是命令前缀,必须填写\n中括号'[]'内为参数");
+                        System.out.println("参数一般由'类型'和'值'组成,如[-i userId]中'-i'是参数类型,'userId'为参数的值");
+                        System.out.println("特殊情况下命令的参数只需输入值或者只需输入类型,如' market [-all] '或者' prod [productName]'\n" +
+                                "又或者查询全部超市的命令只需输入命令前缀和参数类型：'market -all',此时' market '为命令前缀,'-all '为参数类型\n" +
+                                "大部分只有一个参数的命令只需输入命令前缀和参数的值,如用户取消订单：'order cancel orderId',此时' order cancel '为命令前缀,'orderId'为参数的值");
+                        System.out.println("具体命令通过help查看");
                         System.out.println("--------注：[..]内参数无特殊说明均为选填---------");
                         break;
                     case "exit":
@@ -106,6 +112,9 @@ public class ViewController {
                     break;
                 }
                 switch (inputList.get(0)){
+                    case "shutdown":
+                        System.exit(0);
+                        break;
                     case "help":
                         for(Map.Entry<String, String> entry:InputFormat.USER_VIEW.entrySet()){
                             System.out.println(entry.getKey()+": '"+entry.getValue()+"'");
@@ -164,6 +173,9 @@ public class ViewController {
                     break;
                 }
                 switch (inputList.get(0)){
+                    case "shutdown":
+                        System.exit(0);
+                        break;
                     case "help":
                         for(Map.Entry<String, String> entry:InputFormat.MARKET_VIEW.entrySet()){
                             System.out.println(entry.getKey()+": '"+entry.getValue()+"'");

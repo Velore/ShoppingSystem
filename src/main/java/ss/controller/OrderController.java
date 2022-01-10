@@ -75,13 +75,18 @@ public class OrderController {
                         System.out.println("存在异常参数");
                 }
             }
-            if(new StoreServiceImpl().queryStoreByQueryBo(new QueryStoreBo(view.getMarketId(), productId)).isEmpty()){
+            if(new StoreServiceImpl().queryStoreByQueryBo(
+                    new QueryStoreBo(view.getMarketId(), productId)).isEmpty()){
                 return "该超市不存在指定商品";
             }
             if(orderNum <= 0){
                 return "订购数量必须大于0";
             }
-            if(orderService.insertOrder(new Order(view.getUserId(), view.getMarketId(), productId, orderNum))){
+            if(orderService.insertOrder(new Order(
+                    view.getUserId(),
+                    view.getMarketId(),
+                    productId,
+                    orderNum))){
                 return "订单添加成功";
             }
             return "订单添加失败";
@@ -89,13 +94,18 @@ public class OrderController {
         if(!viewService.checkUser(view)){
             return "权限不足，请联系该超市管理员或root用户进行操作";
         }
-        if(inputList.size()>2 && Constant.ORDER_CHECK_ARG.equals(inputList.get(1))){
+        if(inputList.size()==3 && Constant.ORDER_CHECK_ARG.equals(inputList.get(1))){
             Order order = orderService.queryOrderByOrderId(inputList.get(2));
-            order.setOrderStatus(1);
-            if(orderService.updateOrder(order)){
-                return "订单已完成";
+            if(order == null){
+                return "订单不存在,请检查订单号";
             }
-            return "订单失败";
+            if(order.getOrderStatus()!=0){
+                return "订单已处理,无需再次处理";
+            }
+            if(orderService.updateOrder(order)){
+                return "订单处理完成";
+            }
+            return "订单处理失败";
         }
         //查询订单
         return queryOrder(view, inputList);

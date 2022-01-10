@@ -32,8 +32,8 @@ public class ProductController {
             return ListUtils.productListString(productService.queryAllProduct());
         }
         //查询参数限定商品名
-        if(inputList.size()>2 && "-n".equals(inputList.get(1))){
-            return ListUtils.productListString(productService.queryProductLikeName(inputList.get(2)));
+        if(inputList.size() == 2 && !"-d".equals(inputList.get(1))){
+            return ListUtils.productListString(productService.queryProductLikeName(inputList.get(1)));
         }
         //对商品进行增删改需要root用户
         if(!viewService.checkUser(view)){
@@ -41,6 +41,9 @@ public class ProductController {
         }
         //添加新商品
         if(inputList.size()>1 && Constant.INSERT_ARG.equals(inputList.get(1))){
+            if(inputList.size()%2!=0){
+                return "输入格式错误或参数缺失";
+            }
             String productName = null, description = null;
             for(int i = 2;i<inputList.size();i += 2){
                 if("-n".equals(inputList.get(i))){
@@ -59,6 +62,9 @@ public class ProductController {
         }
         //修改商品信息
         if(inputList.size()>1 && Constant.ALTER_ARG.equals(inputList.get(1))){
+            if(inputList.size()%2!=0){
+                return "输入格式错误或参数缺失";
+            }
             Product product = new Product();
             for(int i = 2;i<inputList.size();i += 2){
                 switch (inputList.get(i)){
@@ -80,15 +86,17 @@ public class ProductController {
             }
             return "商品修改失败";
         }
-        if(inputList.size()>1 && "-d".equals(inputList.get(1))){
-            if(!storeService.queryStoreByQueryBo(new QueryStoreBo(null, inputList.get(2))).isEmpty()){
+        //可以在-d后输入多个参数,但只有最后一个参数生效,作为商品id
+        if(inputList.size()>2 && "-d".equals(inputList.get(1))){
+            if(!storeService.queryStoreByQueryBo(
+                    new QueryStoreBo(null, inputList.get(inputList.size()-1))).isEmpty()){
                 return "仍有超市存在该商品库存,不可删除该商品";
             }
-            if(productService.deleteProduct(inputList.get(2))){
+            if(productService.deleteProduct(inputList.get(inputList.size()-1))){
                 return "商品删除成功";
             }
             return "商品删除失败";
         }
-        return ListUtils.productListString(productService.queryAllProduct());
+        return "命令无法识别";
     }
 }

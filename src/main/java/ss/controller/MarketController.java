@@ -54,13 +54,14 @@ public class MarketController {
 
     public static String userViewInput(View view, List<String> inputList){
         if(inputList.size()>2 &&"-d".equals(inputList.get(1))){
-            view.setMarketId(inputList.get(2));
+            //若存在多个参数,则只有最后一个参数作为marketId
+            view.setMarketId(inputList.get(inputList.size()-1));
             //检查用户是否为超市管理员
             if(!viewService.checkUser(view)){
                 return "权限不足，请联系该超市管理员或root用户进行操作";
             }
             //检查是否存在未处理订单
-            if(!orderService.checkOrder(view.getMarketId())){
+            if(!orderService.isOrderAllCheck(view.getMarketId())){
                 return view.getMarketId()+"存在未完成订单,不可删除超市";
             }
             //删除超市库存

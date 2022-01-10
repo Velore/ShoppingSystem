@@ -17,6 +17,10 @@ public class ViewServiceImpl implements ViewService {
             return true;
         }
         MarketService marketService = new MarketServiceImpl();
+        //若不存在对应的market,返回false
+        if(marketService.queryMarketByMarketId(view.getMarketId())==null){
+            return false;
+        }
         return view.getUserId().equals(marketService.queryMarketByMarketId(view.getMarketId()).getUserId());
     }
 }

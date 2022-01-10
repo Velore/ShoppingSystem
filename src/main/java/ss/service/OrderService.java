@@ -16,7 +16,7 @@ public interface OrderService {
      * @param marketId id
      * @return 存在返回true
      */
-    boolean checkOrder(String marketId);
+    boolean isOrderAllCheck(String marketId);
 
     /**
      * 插入新的订单

@@ -40,17 +40,18 @@ public class InputFormat {
         USER_VIEW.put("1.查询[多个]超市(默认为[当前]用户拥有的,可限定超市名字或超市管理员)", "market [-n marketName] [-u userId]");
         USER_VIEW.put("2.查询[全部]超市", "market [-all](必填)");
         USER_VIEW.put("3.新增超市,指定[当前]用户为超市管理员", "market ins [marketName](必填)");
-        USER_VIEW.put("4.删除[指定]超市", "market -d [marketId](必填)");
+        USER_VIEW.put("4.删除[指定]超市,-d后的参数允许输入多个,但只有最后一个作为marketId", "market -d [marketId](必填)");
         USER_VIEW.put("5.进入[指定]超市", "into [marketId](必填)");
 
         USER_VIEW.put("\n商品", "--------------------------------------");
-        USER_VIEW.put("a.查询[多个]商品(默认查询全部商品,可限定商品名)", "prod [-n productName]");
+        USER_VIEW.put("a.查询[多个]商品(默认查询全部商品,可限定商品名)", "prod [productName]");
         USER_VIEW.put("b.新增商品(root用户)", "prod ins [-n productName](必填) [-d description]");
         USER_VIEW.put("c.修改[指定]商品信息(root用户)", "prod alter [-i productId](必填) [-n productName] [-d description]");
-        USER_VIEW.put("d.删除[指定]商品(root用户)", "prod -d [productId](必填)");
+        USER_VIEW.put("d.删除[指定]商品(root用户),-d后的参数允许输入多个,但只有最后一个作为productId", "prod -d [productId](必填)");
 
         USER_VIEW.put("\n获取帮助","help");
         USER_VIEW.put("返回系统主界面","exit");
+        USER_VIEW.put("退出程序","shutdown");
 
         //以下为超市界面
         MARKET_VIEW.put("\n超市", "--------------------------------------");
@@ -77,5 +78,6 @@ public class InputFormat {
 
         MARKET_VIEW.put("\n获取帮助","help");
         MARKET_VIEW.put("返回用户界面","exit");
+        MARKET_VIEW.put("退出程序","shutdown");
     }
 }

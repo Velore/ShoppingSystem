@@ -6,7 +6,6 @@ import ss.bo.QueryStoreBo;
 import ss.dao.OrderMapper;
 import ss.po.Order;
 import ss.po.Store;
-import ss.service.MarketService;
 import ss.service.OrderService;
 import ss.service.StoreService;
 import ss.utils.MybatisUtils;
@@ -24,14 +23,20 @@ public class OrderServiceImpl implements OrderService {
     OrderMapper mapper = session.getMapper(OrderMapper.class);
 
     @Override
-    public boolean checkOrder(String marketId) {
+    public boolean isOrderAllCheck(String marketId) {
         List<Order> orderList = queryOrderByQueryOrderBo(
                 new QueryOrderBo(null, marketId, null));
+        //超市没有订单
+        if(orderList.isEmpty()){
+            return true;
+        }
         for(Order o : orderList){
+            //存在订单未被处理
             if(o.getOrderStatus() == 0){
                 return false;
             }
         }
+        //订单已全部被处理,或订购者取消
         return true;
     }
 
@@ -47,10 +52,18 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public boolean updateOrder(Order order){
         StoreService storeService = new StoreServiceImpl();
-        Store store = storeService.queryStoreByQueryBo(new QueryStoreBo(order.getMarketId(), order.getProductId())).get(0);
+        //查询订单对应的库存
+        Store store = storeService.queryStoreByQueryBo(
+                new QueryStoreBo(order.getMarketId(), order.getProductId())).get(0);
         if(store.getStoreNum()>=order.getOrderNum()){
             store.setStoreNum(store.getStoreNum()-order.getOrderNum());
+            //库存足够,更新订单状态为完成
+            order.setOrderStatus(1);
+        }else {
+            //库存不足,更新订单状态为失败
+            order.setOrderStatus(2);
         }
+        //同时更新订单和对应的库存
         if(mapper.updateOrder(order) == 1 && storeService.updateStore(store)){
             session.commit();
             return true;
