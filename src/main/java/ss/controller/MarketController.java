@@ -1,13 +1,16 @@
 package ss.controller;
 
 import ss.bo.QueryMarketBo;
+import ss.constant.Constant;
 import ss.po.Market;
 import ss.po.View;
 import ss.service.MarketService;
 import ss.service.OrderService;
+import ss.service.StoreService;
 import ss.service.ViewService;
 import ss.service.impl.MarketServiceImpl;
 import ss.service.impl.OrderServiceImpl;
+import ss.service.impl.StoreServiceImpl;
 import ss.service.impl.ViewServiceImpl;
 import ss.utils.ListUtils;
 
@@ -22,6 +25,8 @@ public class MarketController {
     static MarketService marketService = new MarketServiceImpl();
 
     static OrderService orderService = new OrderServiceImpl();
+
+    static StoreService storeService = new StoreServiceImpl();
 
     static ViewService viewService = new ViewServiceImpl();
 
@@ -43,7 +48,7 @@ public class MarketController {
         if(isAll){
             return ListUtils.marketListString(marketService.queryAllMarket());
         }else {
-            if(marketBo.getMarketName()!=null || "root".equals(view.getUserId())){
+            if(marketBo.getMarketName()!=null || Constant.DEFAULT_ADMIN_ID.equals(view.getUserId())){
                 marketBo.setUserId(null);
             }
             return ListUtils.marketListString(marketService.queryMarketByQueryMarketBo(marketBo));
@@ -52,19 +57,24 @@ public class MarketController {
 
     public static String userViewInput(View view, List<String> inputList){
         if(inputList.size()>2 &&"-d".equals(inputList.get(1))){
+            view.setMarketId(inputList.get(2));
             if(!viewService.checkUser(view)){
                 return "权限不足，请联系该超市管理员或root用户进行操作";
             }
             //检查是否存在未处理订单
-            if(!orderService.checkOrder(inputList.get(2))){
-                return "存在未完成订单,不可删除超市";
+            if(!orderService.checkOrder(view.getMarketId())){
+                return view.getMarketId()+"存在未完成订单,不可删除超市";
             }
-            if(marketService.deleteMarket(inputList.get(2))){
-                return "删除成功";
+            //删除超市库存
+            if(!storeService.deleteAllStoreByMarketId(view.getMarketId())){
+                return view.getMarketId()+"库存删除失败";
             }
-            return "删除失败";
+            if(marketService.deleteMarket(view.getMarketId())){
+                return view.getMarketId()+"删除成功";
+            }
+            return view.getMarketId()+"删除失败";
         }
-        if(inputList.size()>2 && "ins".equals(inputList.get(1))){
+        if(inputList.size()>2 && Constant.INSERT_ARG.equals(inputList.get(1))){
             if (marketService.insertMarket(inputList.get(2), view.getUserId())) {
                 return "创建超市成功";
             }
@@ -77,7 +87,7 @@ public class MarketController {
     public static String marketViewInput(View view, List<String> inputList){
         Market market = marketService.queryMarketByMarketId(view.getMarketId());
         //修改超市信息
-        if(inputList.size()>1 &&"alter".equals(inputList.get(1))){
+        if(inputList.size()>1 && Constant.ALTER_ARG.equals(inputList.get(1))){
             if(!viewService.checkUser(view)){
                 return "权限不足，请联系该超市管理员或root用户进行操作";
             }

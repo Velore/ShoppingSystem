@@ -1,7 +1,7 @@
 package ss.controller;
 
 import ss.bo.QueryStoreBo;
-import ss.po.Order;
+import ss.constant.Constant;
 import ss.po.Store;
 import ss.po.View;
 import ss.service.StoreService;
@@ -26,7 +26,7 @@ public class StoreController {
         if(!viewService.checkUser(view)){
             return "权限不足，请联系该超市管理员进行操作";
         }
-        if(inputList.size()>1 && "ins".equals(inputList.get(1))){
+        if(inputList.size()>1 && Constant.INSERT_ARG.equals(inputList.get(1))){
             String productId = null;
             int storeNum = -1;
             for(int i  = 2;i<inputList.size();i += 2){
@@ -38,17 +38,16 @@ public class StoreController {
                 }
             }
             if(productId != null){
-                Store store = storeService.queryStoreByQueryBo(new QueryStoreBo(view.getMarketId(), productId)).get(0);
-                if(store!=null){
-                    store.setStoreNum(store.getStoreNum() + storeNum);
-                    if(storeNum != -1 && storeService.updateStore(store)){
-                        return "超市中已有该商品,库存更新成功";
-                    }
-                }else{
+                if(storeService.queryStoreByQueryBo(new QueryStoreBo(view.getMarketId(), productId)).isEmpty()){
                     if(storeNum != -1 && storeService.insertStore(view.getMarketId(), productId, storeNum)){
                         return "超市库存添加成功";
                     }
                     return "超市库存添加失败";
+                }
+                Store store = storeService.queryStoreByQueryBo(new QueryStoreBo(view.getMarketId(), productId)).get(0);
+                store.setStoreNum(store.getStoreNum() + storeNum);
+                if(storeNum != -1 && storeService.updateStore(store)){
+                    return "超市中已有该商品,库存更新成功";
                 }
             }
         }

@@ -36,6 +36,13 @@ public interface StoreService {
     boolean deleteStore(String marketId, String productId);
 
     /**
+     * 根据超市id删除该超市全部库存
+     * @param marketId id
+     * @return 是否删除成功
+     */
+    boolean deleteAllStoreByMarketId(String marketId);
+
+    /**
      * 根据查询限定条件查询
      * @param queryBo queryBo
      * @return marketStore list

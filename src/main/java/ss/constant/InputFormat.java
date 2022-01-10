@@ -46,8 +46,8 @@ public class InputFormat {
         USER_VIEW.put("\n商品", "--------------------------------------");
         USER_VIEW.put("a.查询[多个]商品(默认查询全部商品,可限定商品名)", "prod [-n productName]");
         USER_VIEW.put("b.新增商品(root用户)", "prod ins [-n productName](必填) [-d description]");
-        USER_VIEW.put("c.修改[指定]商品信息", "prod alter [-i productId](必填) [-n productName] [-d description]");
-        USER_VIEW.put("d.删除[指定]商品", "prod -d [productId](必填)");
+        USER_VIEW.put("c.修改[指定]商品信息(root用户)", "prod alter [-i productId](必填) [-n productName] [-d description]");
+        USER_VIEW.put("d.删除[指定]商品(root用户)", "prod -d [productId](必填)");
 
         USER_VIEW.put("获取帮助","help");
         USER_VIEW.put("返回系统主界面","exit");
@@ -57,13 +57,13 @@ public class InputFormat {
         MARKET_VIEW.put("a.查询[当前]超市的信息", "market");
         MARKET_VIEW.put("b.查询[多个]超市(默认为[当前]用户拥有的,可限定超市名字或超市管理员)", "market [-n marketName] [-u userId]");
         MARKET_VIEW.put("c.查询[全部]超市", "market [-all](必填)");
-        MARKET_VIEW.put("d.修改[当前]超市", "market [-n marketName] [-u userId]");
+        MARKET_VIEW.put("d.修改[当前]超市", "market alter [-n marketName] [-u userId]");
 
         MARKET_VIEW.put("\n商品", "--------------------------------------");
         MARKET_VIEW.put("1.查询[多个]商品(默认查询全部商品,可限定商品名)", "prod [-n productName]");
         MARKET_VIEW.put("2.新增商品(root用户)", "prod ins [-n productName](必填) [-d description]");
-        MARKET_VIEW.put("3.修改[指定]商品信息", "prod alter [-i productId](必填) [-n productName] [-d description]");
-        MARKET_VIEW.put("4.删除[指定]商品", "prod -d [productId](必填)");
+        MARKET_VIEW.put("3.修改[指定]商品信息(root用户)", "prod alter [-i productId](必填) [-n productName] [-d description]");
+        MARKET_VIEW.put("4.删除[指定]商品(root用户)", "prod -d [productId](必填)");
 
         MARKET_VIEW.put("\n库存", "--------------------------------------");
         MARKET_VIEW.put("a.新增[当前]超市库存,若库存已存在,则更新库存(数量增加)", "store ins [-p productId](必填) [-n storeNum](必填)");

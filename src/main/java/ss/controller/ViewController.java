@@ -3,6 +3,7 @@ package ss.controller;
 import ss.bo.QueryMarketBo;
 import ss.bo.QueryOrderBo;
 import ss.bo.QueryStoreBo;
+import ss.constant.Constant;
 import ss.constant.InputFormat;
 import ss.po.View;
 import ss.service.*;
@@ -37,11 +38,11 @@ public class ViewController {
     public static void mainView(View view){
         input = null;
         inputList = null;
-        view.setUserId(null);
-        view.setMarketId(null);
         System.out.println("--------系统主界面---------");
         System.out.println("输入help查询当前页面全部命令");
         while (true){
+            view.setUserId(null);
+            view.setMarketId(null);
             try{
                 do{
                     System.out.print("main->");
@@ -52,8 +53,7 @@ public class ViewController {
                     case "reg":
                         if(userService.insertUser(inputList.get(1), inputList.get(2))){
                             System.out.println("用户注册成功");
-                            view.setUserId(inputList.get(1));
-                            userView(view);
+                            break;
                         }
                         break;
                     case "login":
@@ -83,23 +83,23 @@ public class ViewController {
     public static void userView(View view){
         input = null;
         inputList = null;
-        view.setMarketId(null);
         System.out.println("----------用户界面---------");
         System.out.println("输入help查询当前页面全部命令");
-        System.out.println("当前用户:"+userService.queryUserByUserId(view.getUserId()));
-        if("root".equals(view.getUserId())){
+        System.out.println("当前用户:"+userService.queryUserByUserId(view.getUserId()).getUsername());
+        if(Constant.DEFAULT_ADMIN_ID.equals(view.getUserId())){
             System.out.println("->"+view.getUserId()+"[market]:\n"+ListUtils.marketListString(marketService.queryAllMarket()));
         }else{
             System.out.println("->"+view.getUserId()+"[market]:\n"+ListUtils.marketListString(marketService.queryMarketByQueryMarketBo(
                     new QueryMarketBo(null, view.getUserId()))));
         }
-        if("root".equals(view.getUserId())){
+        if(Constant.DEFAULT_ADMIN_ID.equals(view.getUserId())){
             System.out.println("->"+view.getUserId()+"[order]:\n"+ListUtils.orderListString(orderService.queryAllOrder()));
         }else{
             System.out.println("->"+view.getUserId()+"[order]:\n"+ListUtils.orderListString(orderService.queryOrderByQueryOrderBo(
                     new QueryOrderBo(view.getUserId(), null, null))));
         }
         while (true){
+            view.setMarketId(null);
             try{
                 do{
                     System.out.print(view.getUserId()+"->");
@@ -132,8 +132,10 @@ public class ViewController {
                         if(inputList.size()>1 && marketService.queryMarketByMarketId(inputList.get(1))!=null){
                             view.setMarketId(inputList.get(1));
                             marketView(view);
+                        }else if(inputList.size() <= 1){
+                            System.out.println("命令不完整,格式为' into marketId '");
                         }else {
-                            System.out.println("命令不完整");
+                            System.out.println("超市不存在");
                         }
                         break;
                     default:
@@ -150,7 +152,7 @@ public class ViewController {
         inputList = null;
         System.out.println("----------超市界面---------");
         System.out.println("输入help查询当前页面全部命令");
-        System.out.println("当前超市:" + marketService.queryMarketByMarketId(view.getMarketId()));
+        System.out.println("当前超市:" + marketService.queryMarketByMarketId(view.getMarketId()).getMarketName());
         System.out.println("->"+view.getMarketId() + "[store]:" + ListUtils.storeListString(storeService.queryStoreByQueryBo(
                 new QueryStoreBo(view.getMarketId(), null))));
         System.out.println("->"+view.getMarketId() + "[order]:" + ListUtils.orderListString(orderService.queryOrderByQueryOrderBo(

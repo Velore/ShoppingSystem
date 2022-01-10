@@ -47,6 +47,18 @@ public class StoreServiceImpl implements StoreService {
     }
 
     @Override
+    public boolean deleteAllStoreByMarketId(String marketId) {
+        List<Store> storeList = queryStoreByQueryBo(new QueryStoreBo(marketId, null));
+        for(Store s : storeList){
+            if(mapper.deleteStore(marketId, s.getProductId())!=1){
+                return false;
+            }
+        }
+        session.commit();
+        return true;
+    }
+
+    @Override
     public List<Store> queryStoreByQueryBo(QueryStoreBo queryBo) {
         if(queryBo.getMarketId() == null && queryBo.getProductId() != null){
             return mapper.queryStoreByProductId(queryBo.getProductId());
