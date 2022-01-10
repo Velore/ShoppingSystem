@@ -33,7 +33,8 @@ public class InputFormat {
         USER_VIEW.put("3.查询[全部]用户信息(root用户)","user");
 
         USER_VIEW.put("\n订单", "--------------------------------------");
-        USER_VIEW.put("a.查询[当前]用户订单(可限定超市id或商品id)","order [-m marketId] [-p productId]");
+        USER_VIEW.put("a.查询[当前]用户订单(可限定超市id或商品id)",
+                "order [-m marketId] [-p productId] [-min 最小订购数] [-max 最大订购数] [-s orderStatus]");
         USER_VIEW.put("b.修改[当前]用户订单的状态为[取消]","order cancel [orderId](必填)");
 
         USER_VIEW.put("\n库存", "--------------------------------------");

@@ -26,6 +26,7 @@ public class OrderController {
     static ViewService viewService = new ViewServiceImpl();
 
     public static String userViewInput(View view, List<String> inputList){
+        //取消订单
         if(inputList.size()>1 && Constant.ORDER_CANCEL_ARG.equals(inputList.get(1))){
             Order order = orderService.queryOrderByOrderId(inputList.get(2));
             order.setOrderStatus(3);
@@ -33,25 +34,6 @@ public class OrderController {
                 return "取消订单成功";
             }
             return "取消订单失败";
-        }
-        QueryOrderBo orderBo = new QueryOrderBo();
-        orderBo.setUserId(view.getUserId());
-        if(inputList.size()>1){
-            if((inputList.size() - 1)%2!=0){
-                return "输入格式错误或参数缺失";
-            }
-            for(int i  = 1;i<inputList.size();i += 2){
-                switch (inputList.get(i)){
-                    case "-m":
-                        orderBo.setMarketId(inputList.get(i+1));
-                        break;
-                    case "-p":
-                        orderBo.setProductId(inputList.get(i+1));
-                        break;
-                    default:
-                        System.out.println("存在异常参数");
-                }
-            }
         }
         return queryOrder(view, inputList);
     }
@@ -125,13 +107,15 @@ public class OrderController {
             return "输入格式错误或参数缺失";
         }
         int minOrderNum = 0, maxOrderNum = -1, orderStatus = -1;
+        String queryMarketId = null;
         for(int i  = 1;i<inputList.size();i += 2){
             switch (inputList.get(i)){
-                case "-u":
-                    orderBo.setUserId(inputList.get(i+1));
+                case "-m":
+                    queryMarketId = inputList.get(i+1);
                     break;
-                case "-p":
-                    orderBo.setProductId(inputList.get(i+1));
+                case "-u": orderBo.setUserId(inputList.get(i+1));
+                    break;
+                case "-p": orderBo.setProductId(inputList.get(i+1));
                     break;
                 case "-min":
                     if(InputUtils.isNumString(inputList.get(i+1))){
@@ -157,6 +141,11 @@ public class OrderController {
                 default:
                     System.out.println("存在异常参数"+ inputList.get(i));
             }
+        }
+        if(view.getMarketId()==null){
+            orderBo.setMarketId(queryMarketId);
+        }else{
+            orderBo.setMarketId(view.getMarketId());
         }
         List<Order> orderList = orderService.queryOrderByQueryOrderBo(orderBo);
         List<Order> returnList = new ArrayList<>();

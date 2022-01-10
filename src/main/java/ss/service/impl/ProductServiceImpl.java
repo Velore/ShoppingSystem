@@ -15,14 +15,17 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
 
     SqlSession session = MybatisUtils.getSqlSession();
-
     ProductMapper mapper = session.getMapper(ProductMapper.class);
 
     @Override
     public boolean insertProduct(Product product) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        ProductMapper mapper = session.getMapper(ProductMapper.class);
         if(mapper.queryProductByProductId(product.getProductId())==null){
             if(mapper.insertProduct(product) == 1){
                 session.commit();
+                session.close();
                 return true;
             }
         }
@@ -31,11 +34,14 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean updateProduct(Product product) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        ProductMapper mapper = session.getMapper(ProductMapper.class);
         if(mapper.queryProductByProductId(product.getProductId())==null){
             return false;
         }
         if(mapper.updateProduct(product)==1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -43,8 +49,11 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public boolean deleteProduct(String productId) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        ProductMapper mapper = session.getMapper(ProductMapper.class);
         if(mapper.deleteProduct(productId) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;

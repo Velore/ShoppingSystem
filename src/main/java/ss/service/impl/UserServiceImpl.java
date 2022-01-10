@@ -4,7 +4,6 @@ import org.apache.ibatis.session.SqlSession;
 import ss.constant.Constant;
 import ss.dao.UserMapper;
 import ss.po.User;
-import ss.service.MarketService;
 import ss.service.UserService;
 import ss.utils.MybatisUtils;
 
@@ -22,15 +21,22 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean loginIn(String userId, String password) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        UserMapper userMapper = session.getMapper(UserMapper.class);
         User user = userMapper.queryUserByUserId(userId);
         return user != null && password.equals(user.getPassword());
     }
 
     @Override
     public boolean insertUser(String userId, String password) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        UserMapper userMapper = session.getMapper(UserMapper.class);
         if(userMapper.queryUserByUserId(userId)==null){
             if(userMapper.insertUser(new User(userId, Constant.DEFAULT_USERNAME, password)) == 1) {
                 session.commit();
+                session.close();
                 return true;
             }
         }
@@ -39,11 +45,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean updateUser(User user) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        UserMapper userMapper = session.getMapper(UserMapper.class);
         if(userMapper.queryUserByUserId(user.getUserId())==null){
             return false;
         }
         if(userMapper.updateUser(user)==1){
             session.commit();
+            session.close();
             return true;
         }
         return false;

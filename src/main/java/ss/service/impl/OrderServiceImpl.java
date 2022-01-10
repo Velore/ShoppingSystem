@@ -19,7 +19,6 @@ import java.util.List;
 public class OrderServiceImpl implements OrderService {
 
     SqlSession session = MybatisUtils.getSqlSession();
-
     OrderMapper mapper = session.getMapper(OrderMapper.class);
 
     @Override
@@ -42,8 +41,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean insertOrder(Order order) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        OrderMapper mapper = session.getMapper(OrderMapper.class);
         if(mapper.insertOrder(order) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -51,6 +53,8 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean updateOrder(Order order){
+        SqlSession session = MybatisUtils.getSqlSession();
+        OrderMapper mapper = session.getMapper(OrderMapper.class);
         StoreService storeService = new StoreServiceImpl();
         //查询订单对应的库存
         Store store = storeService.queryStoreByQueryBo(
@@ -66,6 +70,7 @@ public class OrderServiceImpl implements OrderService {
         //同时更新订单和对应的库存
         if(mapper.updateOrder(order) == 1 && storeService.updateStore(store)){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -73,8 +78,11 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean deleteOrder(String orderId) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        OrderMapper mapper = session.getMapper(OrderMapper.class);
         if(mapper.deleteOrder(orderId) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;

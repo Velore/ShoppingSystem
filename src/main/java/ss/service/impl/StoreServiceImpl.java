@@ -21,8 +21,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public boolean insertStore(String marketId, String productId, int storeNum) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        StoreMapper mapper = session.getMapper(StoreMapper.class);
         if(mapper.insertStore(marketId, productId, storeNum) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -30,8 +34,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public boolean updateStore(Store store) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        StoreMapper mapper = session.getMapper(StoreMapper.class);
         if(mapper.updateStore(store) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -39,8 +47,12 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public boolean deleteStore(String marketId, String productId) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        StoreMapper mapper = session.getMapper(StoreMapper.class);
         if(mapper.deleteStore(marketId, productId) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -48,6 +60,9 @@ public class StoreServiceImpl implements StoreService {
 
     @Override
     public boolean deleteAllStoreByMarketId(String marketId) {
+        SqlSession session = MybatisUtils.getSqlSession();
+
+        StoreMapper mapper = session.getMapper(StoreMapper.class);
         List<Store> storeList = queryStoreByQueryBo(new QueryStoreBo(marketId, null));
         for(Store s : storeList){
             if(mapper.deleteStore(marketId, s.getProductId())!=1){

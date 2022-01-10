@@ -18,16 +18,18 @@ import java.util.List;
 public class MarketServiceImpl implements MarketService {
 
     SqlSession session = MybatisUtils.getSqlSession();
-
     MarketMapper mapper = session.getMapper(MarketMapper.class);
 
     @Override
     public boolean insertMarket(String marketName, String userId) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        MarketMapper mapper = session.getMapper(MarketMapper.class);
         if(mapper.insertMarket(new Market(
                 RandomUtils.intString(Constant.DEFAULT_ID_LENGTH),
                 marketName,
                 userId)) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -35,11 +37,14 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public boolean updateMarket(Market market) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        MarketMapper mapper = session.getMapper(MarketMapper.class);
         if(mapper.queryMarketByMarketId(market.getMarketId()) == null){
             return false;
         }
         if(mapper.updateMarket(market) == 1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
@@ -47,8 +52,11 @@ public class MarketServiceImpl implements MarketService {
 
     @Override
     public boolean deleteMarket(String marketId) {
+        SqlSession session = MybatisUtils.getSqlSession();
+        MarketMapper mapper = session.getMapper(MarketMapper.class);
         if(mapper.deleteMarket(marketId)==1){
             session.commit();
+            session.close();
             return true;
         }
         return false;
