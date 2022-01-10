@@ -6,6 +6,7 @@ import ss.bo.QueryStoreBo;
 import ss.dao.OrderMapper;
 import ss.po.Order;
 import ss.po.Store;
+import ss.service.MarketService;
 import ss.service.OrderService;
 import ss.service.StoreService;
 import ss.utils.MybatisUtils;
@@ -47,7 +48,7 @@ public class OrderServiceImpl implements OrderService {
     public boolean updateOrder(Order order){
         StoreService storeService = new StoreServiceImpl();
         Store store = storeService.queryStoreByQueryBo(new QueryStoreBo(order.getMarketId(), order.getProductId())).get(0);
-        if(store.getStoreNum()>order.getOrderNum()){
+        if(store.getStoreNum()>=order.getOrderNum()){
             store.setStoreNum(store.getStoreNum()-order.getOrderNum());
         }
         if(mapper.updateOrder(order) == 1 && storeService.updateStore(store)){

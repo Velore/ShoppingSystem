@@ -23,41 +23,39 @@ import java.util.List;
 public class MarketController {
 
     static MarketService marketService = new MarketServiceImpl();
-
     static OrderService orderService = new OrderServiceImpl();
-
     static StoreService storeService = new StoreServiceImpl();
-
     static ViewService viewService = new ViewServiceImpl();
 
     public static String queryMarket(View view, List<String> inputList){
+        // 查询全部超市
+        // 该参数存在时,其余查询限定条件无效
+        if(inputList.contains("-all")){
+            return ListUtils.marketListString(marketService.queryAllMarket());
+        }
         QueryMarketBo marketBo = new QueryMarketBo();
-        marketBo.setUserId(view.getUserId());
-        boolean isAll = false;
+        //如果是root用户,默认查询全部超市,普通用户默认查询自己管理的超市
+        marketBo.setUserId(Constant.DEFAULT_ADMIN_ID.equals(view.getUserId()) ? null: view.getUserId());
         for(int i  = 1;i<inputList.size();i += 2){
+            //限定超市管理员
             if("-u".equals(inputList.get(i))){
                 marketBo.setUserId(inputList.get(i+1));
             }
+            //限定超市名
             if("-n".equals(inputList.get(i))){
                 marketBo.setMarketName(inputList.get(i+1));
             }
-            if("-all".equals(inputList.get(i))){
-                isAll = true;
-            }
         }
-        if(isAll){
-            return ListUtils.marketListString(marketService.queryAllMarket());
-        }else {
-            if(marketBo.getMarketName()!=null || Constant.DEFAULT_ADMIN_ID.equals(view.getUserId())){
-                marketBo.setUserId(null);
-            }
-            return ListUtils.marketListString(marketService.queryMarketByQueryMarketBo(marketBo));
+        if(marketBo.getMarketName()!=null && view.getUserId().equals(marketBo.getUserId())){
+            marketBo.setUserId(null);
         }
+        return ListUtils.marketListString(marketService.queryMarketByQueryMarketBo(marketBo));
     }
 
     public static String userViewInput(View view, List<String> inputList){
         if(inputList.size()>2 &&"-d".equals(inputList.get(1))){
             view.setMarketId(inputList.get(2));
+            //检查用户是否为超市管理员
             if(!viewService.checkUser(view)){
                 return "权限不足，请联系该超市管理员或root用户进行操作";
             }
@@ -69,18 +67,20 @@ public class MarketController {
             if(!storeService.deleteAllStoreByMarketId(view.getMarketId())){
                 return view.getMarketId()+"库存删除失败";
             }
+            //删除超市
             if(marketService.deleteMarket(view.getMarketId())){
                 return view.getMarketId()+"删除成功";
             }
             return view.getMarketId()+"删除失败";
         }
+        //创建超市
         if(inputList.size()>2 && Constant.INSERT_ARG.equals(inputList.get(1))){
             if (marketService.insertMarket(inputList.get(2), view.getUserId())) {
                 return "创建超市成功";
             }
             return "创建超市失败";
         }
-
+        //查询超市信息
         return queryMarket(view, inputList);
     }
 
@@ -104,6 +104,7 @@ public class MarketController {
             }
             return "修改失败";
         }
+        //在超市界面时,默认查询查询当前超市信息
         if(inputList.size() == 1){
             return marketService.queryMarketByMarketId(view.getMarketId()).toString();
         }

@@ -23,10 +23,10 @@ public class StoreController {
     static ViewService viewService = new ViewServiceImpl();
 
     public static String marketViewInput(View view, List<String> inputList){
-        if(!viewService.checkUser(view)){
-            return "权限不足，请联系该超市管理员进行操作";
-        }
         if(inputList.size()>1 && Constant.INSERT_ARG.equals(inputList.get(1))){
+            if(!viewService.checkUser(view)){
+                return "权限不足，请联系该超市管理员进行操作";
+            }
             String productId = null;
             int storeNum = -1;
             for(int i  = 2;i<inputList.size();i += 2){
@@ -52,6 +52,9 @@ public class StoreController {
             }
         }
         if(inputList.size()>2 && "-d".equals(inputList.get(1))){
+            if(!viewService.checkUser(view)){
+                return "权限不足，请联系该超市管理员进行操作";
+            }
             if(storeService.deleteStore(view.getMarketId(), inputList.get(2))){
                 return "库存:"+inputList.get(2)+"已删除";
             }

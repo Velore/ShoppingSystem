@@ -22,23 +22,19 @@ import java.util.Scanner;
 public class ViewController {
 
     static Scanner scanner = new Scanner(System.in);
-
     static String input;
 
     static List<String> inputList;
-
     static UserService userService = new UserServiceImpl();
-
     static MarketService marketService = new MarketServiceImpl();
-
     static OrderService orderService = new OrderServiceImpl();
-
     static StoreService storeService = new StoreServiceImpl();
 
     public static void mainView(View view){
         input = null;
         inputList = null;
         System.out.println("--------系统主界面---------");
+        System.out.println("欢迎使用购物管理系统ShoppingSystem");
         System.out.println("输入help查询当前页面全部命令");
         while (true){
             view.setUserId(null);
@@ -63,10 +59,10 @@ public class ViewController {
                         }
                         break;
                     case "help":
-                        System.out.println("--------注：[..]内参数无特殊说明均为选填---------");
                         for(Map.Entry<String, String> entry:InputFormat.MAIN_VIEW.entrySet()){
                             System.out.println(entry.getKey()+": '"+entry.getValue()+"'");
                         }
+                        System.out.println("--------注：[..]内参数无特殊说明均为选填---------");
                         break;
                     case "exit":
                         System.exit(0);
@@ -111,10 +107,10 @@ public class ViewController {
                 }
                 switch (inputList.get(0)){
                     case "help":
-                        System.out.println("--------注：[..]内参数无特殊说明均为选填---------");
                         for(Map.Entry<String, String> entry:InputFormat.USER_VIEW.entrySet()){
                             System.out.println(entry.getKey()+": '"+entry.getValue()+"'");
                         }
+                        System.out.println("--------注：[..]内参数无特殊说明均为选填---------");
                         break;
                     case "user":
                         System.out.println(UserController.userViewInput(view, inputList));
@@ -153,9 +149,9 @@ public class ViewController {
         System.out.println("----------超市界面---------");
         System.out.println("输入help查询当前页面全部命令");
         System.out.println("当前超市:" + marketService.queryMarketByMarketId(view.getMarketId()).getMarketName());
-        System.out.println("->"+view.getMarketId() + "[store]:" + ListUtils.storeListString(storeService.queryStoreByQueryBo(
+        System.out.println("->"+view.getMarketId() + "[store]:\n" + ListUtils.storeListString(storeService.queryStoreByQueryBo(
                 new QueryStoreBo(view.getMarketId(), null))));
-        System.out.println("->"+view.getMarketId() + "[order]:" + ListUtils.orderListString(orderService.queryOrderByQueryOrderBo(
+        System.out.println("->"+view.getMarketId() + "[order]:\n" + ListUtils.orderListString(orderService.queryOrderByQueryOrderBo(
                 new QueryOrderBo(null, view.getMarketId(), null))));
         while (true) {
             try{
@@ -169,10 +165,10 @@ public class ViewController {
                 }
                 switch (inputList.get(0)){
                     case "help":
-                        System.out.println("--------注：[..]内参数无特殊说明均为选填---------");
                         for(Map.Entry<String, String> entry:InputFormat.MARKET_VIEW.entrySet()){
                             System.out.println(entry.getKey()+": '"+entry.getValue()+"'");
                         }
+                        System.out.println("--------注：[..]内参数无特殊说明均为选填---------");
                         break;
                     case "prod":
                         System.out.println(ProductController.viewInput(view, inputList));

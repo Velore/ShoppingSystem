@@ -1,22 +1,25 @@
 # id类字段的存储类型为varchar(16)
-# 名字类字段的存储类型为varchar(16):最多输入4位中文字符
+# 名字类字段的存储类型为varchar(16)
 
 create database shopping_system_5320 character set utf8;
 
 drop database shopping_system_5320;
 
+# 创建用户表
 create table `user_5320`(
 	user_id varchar(16) not null primary key comment '用户id',
 	username varchar(16) not null default 'user' comment '用户名',
 	password varchar(16) not null comment '密码'
 )comment '用户';
 
+# 创建商品表
 create table product_5320(
 	product_id varchar(16) not null primary key comment '商品id',
 	product_name varchar(16) not null default 'product' comment '商品名',
 	description text null default null comment '商品描述'
 )comment '商品';
 
+# 创建超市表
 create table market_5320(
 	market_id varchar(16) not null primary key comment '超市id',
 	market_name varchar(16) not null default 'market' comment '超市名',
@@ -25,6 +28,7 @@ create table market_5320(
 	foreign key (user_id) references `user_5320`(user_id)
 )comment '超市';
 
+# 创建超市库存表
 create table store_5320(
 
 	market_id varchar(16) not null comment '超市id',
@@ -34,8 +38,9 @@ create table store_5320(
     primary key (market_id, product_id),
 	foreign key (market_id) references market_5320(market_id),
 	foreign key (product_id) references product_5320(product_id)
-)comment '超市存货';
+)comment '超市库存';
 
+# 创建订单表
 create table `order_5320`(
 	order_id varchar(16) not null primary key comment '订单id',
 	user_id varchar(16) not null comment '订购者id',
@@ -74,11 +79,8 @@ insert into market_5320(market_id, market_name, user_id) values
 
 insert into store_5320(market_id, product_id, store_num) values
      ('m001', 'p001', 31),('m001', 'p003', 52),('m001', 'p005', 47)
-
     ,('m002', 'p001', 43),('m002', 'p002', 76),('m002', 'p005', 25)
-
     ,('m003', 'p002', 24),('m003', 'p004', 62),('m003', 'p006', 35)
-
     ,('m004', 'p003', 17);
 
 insert into order_5320(order_id, user_id, market_id, product_id, order_num, order_status) values
