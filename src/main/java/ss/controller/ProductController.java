@@ -32,7 +32,7 @@ public class ProductController {
             return ListUtils.productListString(productService.queryAllProduct());
         }
         //查询参数限定商品名
-        if(inputList.size() == 2 && !"-d".equals(inputList.get(1))){
+        if(inputList.size() == 2 && !Constant.ALTER_ARG.equals(inputList.get(1))){
             return ListUtils.productListString(productService.queryProductLikeName(inputList.get(1)));
         }
         //对商品进行增删改需要root用户
@@ -41,7 +41,7 @@ public class ProductController {
         }
         //添加新商品
         if(inputList.size()>1 && Constant.INSERT_ARG.equals(inputList.get(1))){
-            if(inputList.size()%2!=0){
+            if(inputList.size() % 2 != 0){
                 return "输入格式错误或参数缺失";
             }
             String productName = null, description = null;
@@ -68,16 +68,23 @@ public class ProductController {
             String productId = null,productName = null,description = null;
             for(int i = 2;i<inputList.size();i += 2){
                 switch (inputList.get(i)){
-                    case "-i": productId = inputList.get(i+1);
+                    case "-i":
+                        //要修改的商品id
+                        productId = inputList.get(i+1);
                         break;
-                    case "-n": productName = inputList.get(i+1);
+                    case "-n":
+                        //修改商品名
+                        productName = inputList.get(i+1);
                         break;
-                    case "-d": description = inputList.get(i+1);
+                    case "-d":
+                        //修改商品描述
+                        description = inputList.get(i+1);
                         break;
                     default:
                         System.out.println("存在异常参数");
                 }
             }
+            //检查要修改的商品是否存在
             Product product = productService.queryProductByProductId(productId);
             if(product != null){
                 if(productName!=null){
@@ -95,8 +102,8 @@ public class ProductController {
             return "商品修改失败";
         }
         //删除商品
-        //可以在-d后输入多个参数,但只有最后一个参数生效,作为商品id
-        if(inputList.size()>2 && "-d".equals(inputList.get(1))){
+        //可以在del后输入多个参数,但只有最后一个参数生效,作为商品id
+        if(inputList.size()>2 && Constant.DELETE_ARG.equals(inputList.get(1))){
             if(!storeService.queryStoreByQueryBo(
                     new QueryStoreBo(null, inputList.get(inputList.size()-1))).isEmpty()){
                 return "仍有超市存在该商品库存,不可删除该商品";

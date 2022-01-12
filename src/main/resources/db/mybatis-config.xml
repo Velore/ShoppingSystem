@@ -26,8 +26,8 @@
                 <property name="username" value="${username}"/>
                 <property name="password" value="${password}"/>
                 
-                <property name="poolMaximumIdleConnections" value="20"/>
-                <property name="poolMaximumActiveConnections" value="10"/>
+<!--                <property name="poolMaximumIdleConnections" value="20"/>-->
+<!--                <property name="poolMaximumActiveConnections" value="10"/>-->
             </dataSource>
         </environment>
     </environments>

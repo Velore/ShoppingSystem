@@ -28,6 +28,10 @@ public class MarketController {
     static ViewService viewService = new ViewServiceImpl();
 
     public static String queryMarket(View view, List<String> inputList){
+        //在超市界面时,默认查询查询当前超市信息
+        if(view.getMarketId()!=null && inputList.size() == 1){
+            return marketService.queryMarketByMarketId(view.getMarketId()).toString();
+        }
         // 查询全部超市
         // 该参数存在时,其余查询限定条件无效
         if(inputList.contains("-all")){
@@ -60,7 +64,7 @@ public class MarketController {
 
     public static String userViewInput(View view, List<String> inputList){
         //删除超市
-        if(inputList.size()>2 &&"-d".equals(inputList.get(1))){
+        if(inputList.size()>2 && Constant.DELETE_ARG.equals(inputList.get(1))){
             //若存在多个参数,则只有最后一个参数作为marketId
             view.setMarketId(inputList.get(inputList.size()-1));
             //检查用户是否为超市管理员
@@ -103,9 +107,11 @@ public class MarketController {
                 return "输入格式错误或参数缺失";
             }
             for(int i = 2;i<inputList.size();i += 2){
+                //修改超市名
                 if("-n".equals(inputList.get(i))){
                     market.setMarketName(inputList.get(i+1));
                 }
+                //修改超市管理员,该操作一旦执行,当前用户会失去对当前超市的权限,该操作不可撤销
                 if("-u".equals(inputList.get(i))){
                     market.setUserId(inputList.get(i+1));
                 }
@@ -114,10 +120,6 @@ public class MarketController {
                 return "修改成功";
             }
             return "修改失败";
-        }
-        //在超市界面时,默认查询查询当前超市信息
-        if(inputList.size() == 1){
-            return marketService.queryMarketByMarketId(view.getMarketId()).toString();
         }
         return queryMarket(view, inputList);
     }

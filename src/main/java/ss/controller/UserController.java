@@ -18,12 +18,12 @@ public class UserController {
     static UserService userService = new UserServiceImpl();
 
     public static String mainViewInput(View view, List<String> inputList){
-        if((inputList.size()-1)% 2 !=0){
+        if((inputList.size()-1) % 2 !=0){
             return "输入格式错误,请输入完整的登录信息";
         }
         String loginUserId = null, loginPassword = null;
         for(int i = 1;i<inputList.size();i += 2){
-            if("-i".equals(inputList.get(i))){
+            if("-u".equals(inputList.get(i))){
                 loginUserId = inputList.get(i+1);
             }
             if("-p".equals(inputList.get(i))){
@@ -44,7 +44,9 @@ public class UserController {
     public static String userViewInput(View view, List<String> inputList){
         User user = userService.queryUserByUserId(view.getUserId());
         if(inputList.size()>1 && Constant.ALTER_ARG.equals(inputList.get(1))){
-            if(inputList.size() % 2 != 0 ) { return "输入格式错误或参数缺失"; }
+            if(inputList.size() % 2 != 0 ) {
+                return "输入格式错误或参数缺失";
+            }
             for(int i = 2;i<inputList.size();i += 2){
                 if("-n".equals(inputList.get(i))){
                     user.setUsername(inputList.get(i+1));

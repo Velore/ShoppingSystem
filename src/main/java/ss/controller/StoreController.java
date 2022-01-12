@@ -38,12 +38,15 @@ public class StoreController {
             for(int i  = 1;i<inputList.size();i += 2){
                 switch (inputList.get(i)){
                     case "-m":
+                        //限定超市
                         storeBo.setMarketId(inputList.get(i+1));
                         break;
                     case "-p":
+                        //限定商品
                         storeBo.setProductId(inputList.get(i+1));
                         break;
                     case "-min":
+                        //限定最小库存数
                         if(InputUtils.isNumString(inputList.get(i+1))){
                             minStoreNum = Integer.parseInt(inputList.get(i+1));
                         }else {
@@ -51,6 +54,7 @@ public class StoreController {
                         }
                         break;
                     case "-max":
+                        //限定最大库存数
                         if(InputUtils.isNumString(inputList.get(i+1))){
                             maxStoreNum = Integer.parseInt(inputList.get(i+1));
                         }else {
@@ -121,7 +125,7 @@ public class StoreController {
             return "库存更新失败";
         }
         //删除库存
-        if(inputList.size()>2 && "-d".equals(inputList.get(1))){
+        if(inputList.size()>2 && Constant.DELETE_ARG.equals(inputList.get(1))){
             if(!viewService.checkUser(view)){
                 return "权限不足，请联系该超市管理员进行操作";
             }

@@ -28,6 +28,11 @@ public class Constant {
     public static final String ALTER_ARG = "alter";
 
     /**
+     * delete操作的命令
+     */
+    public static final String DELETE_ARG = "del";
+
+    /**
      * 检查订单的命令
      */
     public static final String ORDER_CHECK_ARG = "check";

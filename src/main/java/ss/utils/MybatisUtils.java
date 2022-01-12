@@ -32,38 +32,4 @@ public class MybatisUtils {
     public static SqlSession getSqlSession(){
         return sqlSessionFactory.openSession();
     }
-//
-//    public class MybatisUtils {
-//
-//        private static SqlSessionManager sessionManager = null;
-//
-//        static {
-//            try {
-//                InputStream inputStream = MybatisUtils.class.getClassLoader()
-//                        .getResourceAsStream("mybatis-config1.xml");
-//                sessionManager = SqlSessionManager.newInstance(inputStream);
-//            } catch (Exception e) {
-//                throw new RuntimeException("the Configuration of Mybatis is not exist!");
-//            }
-//        }
-//
-//        /**
-//         * 获取 Mapper
-//         * @param <T>
-//         * @param clazz
-//         * @return
-//         */
-//        public static <T> T getMapper(Class<T> clazz) {
-//            return sessionManager.getMapper(clazz);
-//        }
-//
-//        /**
-//         * 获取 SqlSessionManager
-//         * @return
-//         */
-//        public static SqlSessionManager getSessionManager() {
-//            return sessionManager;
-//        }
-//    }
-
 }
