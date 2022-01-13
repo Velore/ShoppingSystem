@@ -43,11 +43,6 @@ public class Constant {
     public static final String ORDER_CANCEL_ARG = "cancel";
 
     /**
-     * 最长id的长度
-     */
-    public static final int MAX_ID_LENGTH = 16;
-
-    /**
      * 默认id的长度
      */
     public static final int DEFAULT_ID_LENGTH = 6;

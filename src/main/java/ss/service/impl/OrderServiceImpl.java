@@ -1,6 +1,6 @@
 package ss.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionManager;
 import ss.bo.QueryOrderBo;
 import ss.bo.QueryStoreBo;
 import ss.dao.OrderMapper;
@@ -17,9 +17,6 @@ import java.util.List;
  * @date 2022/1/8
  **/
 public class OrderServiceImpl implements OrderService {
-
-    SqlSession session = MybatisUtils.getSqlSession();
-    OrderMapper mapper = session.getMapper(OrderMapper.class);
 
     @Override
     public boolean isOrderAllCheck(String marketId) {
@@ -41,20 +38,16 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean insertOrder(Order order) {
-        SqlSession session = MybatisUtils.getSqlSession();
-        OrderMapper mapper = session.getMapper(OrderMapper.class);
-        if(mapper.insertOrder(order) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        OrderMapper mapper = MybatisUtils.getMapper(OrderMapper.class);
+        return mapper.insertOrder(order) == 1;
     }
 
     @Override
     public boolean updateOrder(Order order){
-        SqlSession session = MybatisUtils.getSqlSession();
-        OrderMapper mapper = session.getMapper(OrderMapper.class);
+        SqlSessionManager manager = MybatisUtils.getSessionManager();
+        //开启手动管理事务
+        manager.startManagedSession();
+        OrderMapper mapper = MybatisUtils.getMapper(OrderMapper.class);
         StoreService storeService = new StoreServiceImpl();
         //查询订单对应的库存
         Store store = storeService.queryStoreByQueryBo(
@@ -69,8 +62,7 @@ public class OrderServiceImpl implements OrderService {
         }
         //同时更新订单和对应的库存
         if(mapper.updateOrder(order) == 1 && storeService.updateStore(store)){
-            session.commit();
-            session.close();
+            manager.commit();
             return true;
         }
         return false;
@@ -78,28 +70,25 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public boolean deleteOrder(String orderId) {
-        SqlSession session = MybatisUtils.getSqlSession();
-        OrderMapper mapper = session.getMapper(OrderMapper.class);
-        if(mapper.deleteOrder(orderId) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        OrderMapper mapper = MybatisUtils.getMapper(OrderMapper.class);
+        return mapper.deleteOrder(orderId) == 1;
     }
 
     @Override
     public List<Order> queryAllOrder() {
+        OrderMapper mapper = MybatisUtils.getMapper(OrderMapper.class);
         return mapper.queryAllOrder();
     }
 
     @Override
     public Order queryOrderByOrderId(String orderId) {
+        OrderMapper mapper = MybatisUtils.getMapper(OrderMapper.class);
         return mapper.queryOrderByOrderId(orderId);
     }
 
     @Override
     public List<Order> queryOrderByQueryOrderBo(QueryOrderBo queryOrderBo) {
+        OrderMapper mapper = MybatisUtils.getMapper(OrderMapper.class);
         return mapper.queryOrderByQueryOrderBo(
                 queryOrderBo.getUserId(),
                 queryOrderBo.getMarketId(),

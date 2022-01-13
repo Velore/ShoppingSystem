@@ -137,15 +137,20 @@ public class ViewController {
                         }
                         System.out.println("--------注：[..]内参数无特殊说明均为可填可不填---------\n");
                         break;
-                    case "user": System.out.println(UserController.userViewInput(view, inputList));
+                    case "user":
+                        System.out.println(UserController.userViewInput(view, inputList));
                         break;
-                    case "store": System.out.println(StoreController.queryStore(view, inputList));
+                    case "store":
+                        System.out.println(StoreController.queryStore(view, inputList));
                         break;
-                    case "order": System.out.println(OrderController.userViewInput(view, inputList));
+                    case "order":
+                        System.out.println(OrderController.userViewInput(view, inputList));
                         break;
-                    case "market": System.out.println(MarketController.userViewInput(view, inputList));
+                    case "market":
+                        System.out.println(MarketController.userViewInput(view, inputList));
                         break;
-                    case "prod": System.out.println(ProductController.viewInput(view, inputList));
+                    case "prod":
+                        System.out.println(ProductController.viewInput(view, inputList));
                         break;
                     case "into":
                         if(inputList.size()>1 && marketService.queryMarketByMarketId(inputList.get(1))!=null){
@@ -157,7 +162,8 @@ public class ViewController {
                             System.out.println("超市不存在");
                         }
                         break;
-                    default: System.out.println("请输入正确的命令,输入help查询当前页面全部命令");
+                    default:
+                        System.out.println("请输入正确的命令,输入help查询当前页面全部命令");
                 }
             }catch (Exception e){
                 e.printStackTrace();
@@ -198,15 +204,20 @@ public class ViewController {
                         }
                         System.out.println("--------注：[..]内参数无特殊说明均为可填可不填---------\n");
                         break;
-                    case "prod": System.out.println(ProductController.viewInput(view, inputList));
+                    case "prod":
+                        System.out.println(ProductController.viewInput(view, inputList));
                         break;
-                    case "market": System.out.println(MarketController.marketViewInput(view, inputList));
+                    case "market":
+                        System.out.println(MarketController.marketViewInput(view, inputList));
                         break;
-                    case "order": System.out.println(OrderController.marketViewInput(view, inputList));
+                    case "order":
+                        System.out.println(OrderController.marketViewInput(view, inputList));
                         break;
-                    case "store": System.out.println(StoreController.marketViewInput(view, inputList));
+                    case "store":
+                        System.out.println(StoreController.marketViewInput(view, inputList));
                         break;
-                    default: System.out.println("请输入正确的命令,输入help查询当前页面全部命令");
+                    default:
+                        System.out.println("请输入正确的命令,输入help查询当前页面全部命令");
                 }
             }catch (Exception e){
                 e.printStackTrace();

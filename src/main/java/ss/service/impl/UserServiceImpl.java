@@ -1,6 +1,6 @@
 package ss.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionManager;
 import ss.constant.Constant;
 import ss.dao.UserMapper;
 import ss.po.User;
@@ -15,62 +15,54 @@ import java.util.List;
  **/
 public class UserServiceImpl implements UserService {
 
-    SqlSession session = MybatisUtils.getSqlSession();
-
-    UserMapper userMapper = session.getMapper(UserMapper.class);
-
     @Override
     public boolean loginIn(String userId, String password) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        UserMapper userMapper = session.getMapper(UserMapper.class);
-        User user = userMapper.queryUserByUserId(userId);
+        UserMapper mapper = MybatisUtils.getMapper(UserMapper.class);
+        User user = mapper.queryUserByUserId(userId);
         return user != null && password.equals(user.getPassword());
     }
 
     @Override
     public boolean insertUser(String userId, String password) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        UserMapper userMapper = session.getMapper(UserMapper.class);
-        if(userMapper.queryUserByUserId(userId)==null){
-            if(userMapper.insertUser(new User(userId, Constant.DEFAULT_USERNAME, password)) == 1) {
-                session.commit();
-                session.close();
-                return true;
-            }
+        UserMapper mapper = MybatisUtils.getMapper(UserMapper.class);
+        if(mapper.queryUserByUserId(userId)==null){
+            return mapper.insertUser(new User(userId, Constant.DEFAULT_USERNAME, password)) == 1;
         }
         return false;
     }
 
     @Override
     public boolean updateUser(User user) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        UserMapper userMapper = session.getMapper(UserMapper.class);
-        if(userMapper.queryUserByUserId(user.getUserId())==null){
+        SqlSessionManager manager = MybatisUtils.getSessionManager();
+        manager.startManagedSession();
+        UserMapper mapper = MybatisUtils.getMapper(UserMapper.class);
+        if(mapper.queryUserByUserId(user.getUserId())==null){
+            manager.commit();
             return false;
         }
-        if(userMapper.updateUser(user)==1){
-            session.commit();
-            session.close();
+        if(mapper.updateUser(user)==1){
+            manager.commit();
             return true;
         }
+        manager.commit();
         return false;
     }
 
     @Override
     public List<User> queryAllUser() {
-        return userMapper.queryAllUser();
+        UserMapper mapper = MybatisUtils.getMapper(UserMapper.class);
+        return mapper.queryAllUser();
     }
 
     @Override
     public User queryUserByUserId(String userId) {
-        return userMapper.queryUserByUserId(userId);
+        UserMapper mapper = MybatisUtils.getMapper(UserMapper.class);
+        return mapper.queryUserByUserId(userId);
     }
 
     @Override
     public List<User> queryUserLikeName(String username) {
-        return userMapper.queryUserLikeName(username);
+        UserMapper mapper = MybatisUtils.getMapper(UserMapper.class);
+        return mapper.queryUserLikeName(username);
     }
 }

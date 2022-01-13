@@ -22,11 +22,12 @@ import java.util.List;
 public class StoreController {
 
     static StoreService storeService = new StoreServiceImpl();
-
     static ViewService viewService = new ViewServiceImpl();
 
     public static String queryStore(View view, List<String> inputList){
-        if(view.getMarketId()==null && !inputList.contains("-p") && !inputList.contains("-m")){
+        if(view.getMarketId()==null
+                && !inputList.contains("-p")
+                && !inputList.contains("-m")){
             return "至少需要指定[-p productId]参数(商品名)和[-m marketId]参数(超市id)其中一个";
         }
         if(inputList.size() > 1 && (inputList.size() + 1) % 2 != 0){

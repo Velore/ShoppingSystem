@@ -1,6 +1,5 @@
 package ss.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
 import ss.bo.QueryMarketBo;
 import ss.constant.Constant;
 import ss.dao.MarketMapper;
@@ -17,63 +16,45 @@ import java.util.List;
  **/
 public class MarketServiceImpl implements MarketService {
 
-    SqlSession session = MybatisUtils.getSqlSession();
-    MarketMapper mapper = session.getMapper(MarketMapper.class);
-
     @Override
     public boolean insertMarket(String marketName, String userId) {
-        SqlSession session = MybatisUtils.getSqlSession();
-        MarketMapper mapper = session.getMapper(MarketMapper.class);
-        if(mapper.insertMarket(new Market(
+        MarketMapper mapper = MybatisUtils.getMapper(MarketMapper.class);
+        return mapper.insertMarket(new Market(
                 RandomUtils.intString(Constant.DEFAULT_ID_LENGTH),
                 marketName,
-                userId)) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+                userId)) == 1;
     }
 
     @Override
     public boolean updateMarket(Market market) {
-        SqlSession session = MybatisUtils.getSqlSession();
-        MarketMapper mapper = session.getMapper(MarketMapper.class);
+        MarketMapper mapper = MybatisUtils.getMapper(MarketMapper.class);
         if(mapper.queryMarketByMarketId(market.getMarketId()) == null){
             return false;
         }
-        if(mapper.updateMarket(market) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        return mapper.updateMarket(market) == 1;
     }
 
     @Override
     public boolean deleteMarket(String marketId) {
-        SqlSession session = MybatisUtils.getSqlSession();
-        MarketMapper mapper = session.getMapper(MarketMapper.class);
-        if(mapper.deleteMarket(marketId)==1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        MarketMapper mapper = MybatisUtils.getMapper(MarketMapper.class);
+        return mapper.deleteMarket(marketId) == 1;
     }
 
     @Override
     public List<Market> queryAllMarket() {
+        MarketMapper mapper = MybatisUtils.getMapper(MarketMapper.class);
         return mapper.queryAllMarket();
     }
 
     @Override
     public Market queryMarketByMarketId(String marketId) {
+        MarketMapper mapper = MybatisUtils.getMapper(MarketMapper.class);
         return mapper.queryMarketByMarketId(marketId);
     }
 
     @Override
     public List<Market> queryMarketByQueryMarketBo(QueryMarketBo queryMarketBo) {
+        MarketMapper mapper = MybatisUtils.getMapper(MarketMapper.class);
 //        没有查询限定条件
         if(queryMarketBo.getMarketName() == null && queryMarketBo.getUserId() == null){
             return mapper.queryAllMarket();

@@ -1,6 +1,5 @@
 package ss.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
 import ss.dao.ProductMapper;
 import ss.po.Product;
 import ss.service.ProductService;
@@ -14,63 +13,46 @@ import java.util.List;
  **/
 public class ProductServiceImpl implements ProductService {
 
-    SqlSession session = MybatisUtils.getSqlSession();
-    ProductMapper mapper = session.getMapper(ProductMapper.class);
 
     @Override
     public boolean insertProduct(Product product) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        ProductMapper mapper = session.getMapper(ProductMapper.class);
+        ProductMapper mapper = MybatisUtils.getMapper(ProductMapper.class);
         if(mapper.queryProductByProductId(product.getProductId())==null){
-            if(mapper.insertProduct(product) == 1){
-                session.commit();
-                session.close();
-                return true;
-            }
+            return mapper.insertProduct(product) == 1;
         }
         return false;
     }
 
     @Override
     public boolean updateProduct(Product product) {
-        SqlSession session = MybatisUtils.getSqlSession();
-        ProductMapper mapper = session.getMapper(ProductMapper.class);
+        ProductMapper mapper = MybatisUtils.getMapper(ProductMapper.class);
         if(mapper.queryProductByProductId(product.getProductId())==null){
             return false;
         }
-        if(mapper.updateProduct(product)==1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        return mapper.updateProduct(product) == 1;
     }
 
     @Override
     public boolean deleteProduct(String productId) {
-        SqlSession session = MybatisUtils.getSqlSession();
-        ProductMapper mapper = session.getMapper(ProductMapper.class);
-        if(mapper.deleteProduct(productId) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        ProductMapper mapper = MybatisUtils.getMapper(ProductMapper.class);
+        return mapper.deleteProduct(productId) == 1;
     }
 
     @Override
     public List<Product> queryAllProduct() {
+        ProductMapper mapper = MybatisUtils.getMapper(ProductMapper.class);
         return mapper.queryAllProduct();
     }
 
     @Override
     public Product queryProductByProductId(String productId) {
+        ProductMapper mapper = MybatisUtils.getMapper(ProductMapper.class);
         return mapper.queryProductByProductId(productId);
     }
 
     @Override
     public List<Product> queryProductLikeName(String productName) {
+        ProductMapper mapper = MybatisUtils.getMapper(ProductMapper.class);
         return mapper.queryProductLikeName(productName);
     }
 }

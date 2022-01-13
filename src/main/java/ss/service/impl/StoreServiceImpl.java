@@ -1,6 +1,6 @@
 package ss.service.impl;
 
-import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionManager;
 import ss.bo.QueryStoreBo;
 import ss.dao.StoreMapper;
 import ss.po.Store;
@@ -15,66 +15,41 @@ import java.util.List;
  **/
 public class StoreServiceImpl implements StoreService {
 
-    SqlSession session = MybatisUtils.getSqlSession();
-
-    StoreMapper mapper = session.getMapper(StoreMapper.class);
-
     @Override
     public boolean insertStore(String marketId, String productId, int storeNum) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        StoreMapper mapper = session.getMapper(StoreMapper.class);
-        if(mapper.insertStore(marketId, productId, storeNum) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        StoreMapper mapper = MybatisUtils.getMapper(StoreMapper.class);
+        return mapper.insertStore(marketId, productId, storeNum) == 1;
     }
 
     @Override
     public boolean updateStore(Store store) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        StoreMapper mapper = session.getMapper(StoreMapper.class);
-        if(mapper.updateStore(store) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        StoreMapper mapper = MybatisUtils.getMapper(StoreMapper.class);
+        return mapper.updateStore(store) == 1;
     }
 
     @Override
     public boolean deleteStore(String marketId, String productId) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        StoreMapper mapper = session.getMapper(StoreMapper.class);
-        if(mapper.deleteStore(marketId, productId) == 1){
-            session.commit();
-            session.close();
-            return true;
-        }
-        return false;
+        StoreMapper mapper = MybatisUtils.getMapper(StoreMapper.class);
+        return mapper.deleteStore(marketId, productId) == 1;
     }
 
     @Override
     public boolean deleteAllStoreByMarketId(String marketId) {
-        SqlSession session = MybatisUtils.getSqlSession();
-
-        StoreMapper mapper = session.getMapper(StoreMapper.class);
+        StoreMapper mapper = MybatisUtils.getMapper(StoreMapper.class);
         List<Store> storeList = queryStoreByQueryBo(new QueryStoreBo(marketId, null));
         for(Store s : storeList){
             if(mapper.deleteStore(marketId, s.getProductId())!=1){
                 return false;
             }
         }
-        session.commit();
         return true;
     }
 
     @Override
     public List<Store> queryStoreByQueryBo(QueryStoreBo queryBo) {
+        SqlSessionManager manager = MybatisUtils.getSessionManager();
+        manager.startManagedSession();
+        StoreMapper mapper = MybatisUtils.getMapper(StoreMapper.class);
         if(queryBo.getMarketId() == null && queryBo.getProductId() != null){
             return mapper.queryStoreByProductId(queryBo.getProductId());
         }
@@ -83,6 +58,7 @@ public class StoreServiceImpl implements StoreService {
         }
         List<Store> sList1 = mapper.queryStoreByMarketId(queryBo.getMarketId());
         List<Store> sList2 = mapper.queryStoreByProductId(queryBo.getProductId());
+        manager.commit();
         sList1.retainAll(sList2);
         return sList1;
     }
